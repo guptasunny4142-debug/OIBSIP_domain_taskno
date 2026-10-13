@@ -1,4 +1,4 @@
-# Cafe Sales — Data Cleaning (Task 3)
+# Cafe Sales — Data Cleaning (Task 1)
 
 A professional-style data cleaning project: a deliberately messy café sales dataset (10,000 transactions) is profiled, cleaned, validated and saved as an analysis-ready CSV. Every decision is documented in the notebook.
 
@@ -80,7 +80,7 @@ Keep `dirty_cafe_sales.csv` in the same folder as the notebook, then run **Kerne
 - Item cannot be recovered when the price is shared by two items (3.00: Cake/Juice, 4.00: Sandwich/Smoothie).
 
 
-# Retail Sales — Exploratory Data Analysis (Task 1)
+# Retail Sales — Exploratory Data Analysis (Task 2)
 
 An exploratory analysis of 1,000 retail transactions covering sales trends, customer demographics, product performance and the key drivers of revenue. The notebook ends with business recommendations, and a statistical check separates real patterns from chance.
 
