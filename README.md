@@ -78,3 +78,77 @@ Keep `dirty_cafe_sales.csv` in the same folder as the notebook, then run **Kerne
 - Missing dates (4.6%) mean those rows drop out of any time-series analysis.
 - `Unknown` is a sizeable share of Payment Method and Location, so analyses of those fields should account for it.
 - Item cannot be recovered when the price is shared by two items (3.00: Cake/Juice, 4.00: Sandwich/Smoothie).
+
+
+# Retail Sales — Exploratory Data Analysis (Task 1)
+
+An exploratory analysis of 1,000 retail transactions covering sales trends, customer demographics, product performance and the key drivers of revenue. The notebook ends with business recommendations, and a statistical check separates real patterns from chance.
+
+
+## Tech stack
+
+Python 3 · pandas · numpy · matplotlib · seaborn · scipy · Jupyter Notebook
+
+## How to run
+
+```bash
+pip install pandas numpy matplotlib seaborn scipy jupyter
+jupyter notebook retail_sales_eda.ipynb
+```
+
+Keep `retail_sales_dataset.csv` in the same folder as the notebook, then choose **Kernel → Restart & Run All**. Charts are also saved to `figures/`.
+
+## The dataset
+
+| Column | Meaning |
+|---|---|
+| Transaction ID | Unique ID per transaction |
+| Date | Purchase date (2023-01-01 to 2024-01-01) |
+| Customer ID | Unique per customer (each customer appears once) |
+| Gender | Female / Male |
+| Age | 18–64 |
+| Product Category | Beauty, Clothing, Electronics |
+| Quantity | 1–4 units |
+| Price per Unit | 25, 30, 50, 300 or 500 |
+| Total Amount | Quantity × Price per Unit |
+
+The data is already clean: no nulls, no duplicates, and `Total Amount` is consistent in every row.
+
+## What the notebook covers
+
+| Checklist item | Where |
+|---|---|
+| Shape, dtypes, null check | Section 1 |
+| Mean, median, mode, std for numeric columns | Section 2 |
+| Monthly and quarterly sales line charts | Section 3 |
+| Age group and gender breakdown | Section 4 |
+| Top 10 best-sellers; revenue by category | Section 5 |
+| Correlation heatmap | Section 6 |
+| Additional visualisations (premium share, weekday, age × category) | Section 7 |
+| Statistical significance checks | Section 8 |
+| Conclusions and recommendations | Section 9 |
+
+## Key findings
+
+- **Price level drives revenue, not who the customer is.** Premium items (priced 300–500) are **40% of orders but 88% of revenue**. A premium order averages about 12× a budget order. Total Amount correlates strongly with Price per Unit (r = 0.85) and moderately with Quantity (r = 0.37).
+- **Sales are uneven through the year.** Peaks in **May (53,150)** and **October (46,580)**, a deep slump in **September (23,620)**. Q3 is about 22% below Q2, and Q4 is the strongest quarter (126,190).
+- **Demographics are balanced.** The gender split is 51% female / 49% male, with ages spread evenly across 18–64.
+- **Categories are balanced.** Electronics 34.4%, Clothing 34.1%, Beauty 31.5% of revenue; no single product line dominates unit sales.
+- **Most apparent demographic differences are not statistically significant.** Gender, age group and weekday differences all fail the significance test (p > 0.05); the age trend in order value is borderline (p ≈ 0.056). Only the premium-vs-budget gap is clearly real.
+
+## Recommendations (summary)
+
+1. Make premium selling the core commercial strategy (upsell prompts, premium-first placement, bundles).
+2. Plan the calendar around the May/October peaks and run a targeted campaign to lift the September slump.
+3. Use broad, category- and price-led targeting rather than gender or age segmentation; A/B test the borderline 18–25 signal.
+4. Start capturing product names/SKUs, a persistent customer ID, sales channel and discounts to enable deeper analysis.
+
+Details and the reasoning behind each are in Section 9 of the notebook.
+
+## Assumptions and limitations
+
+- **No product names exist in the data.** For the "top 10 best-selling products" a product is defined as **category + unit price** (e.g. "Electronics @ 500"), giving 15 product lines.
+- **No currency is stated**, so amounts are in plain currency units.
+- Only **2 transactions fall in 2024**, so monthly and quarterly charts use 2023 only.
+- Each customer appears **once**, so repeat purchase and loyalty cannot be analysed.
+- One year of data means seasonality is suggestive, not proven. There is no cost or margin data, so revenue is analysed, not profit.
