@@ -1,4 +1,4 @@
-# Café Sales — Data Cleaning (Task 3)
+# Cafe Sales — Data Cleaning (Task 3)
 
 A professional-style data cleaning project: a deliberately messy café sales dataset (10,000 transactions) is profiled, cleaned, validated and saved as an analysis-ready CSV. Every decision is documented in the notebook.
 
