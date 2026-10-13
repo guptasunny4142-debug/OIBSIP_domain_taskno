@@ -152,3 +152,73 @@ Details and the reasoning behind each are in Section 9 of the notebook.
 - Only **2 transactions fall in 2024**, so monthly and quarterly charts use 2023 only.
 - Each customer appears **once**, so repeat purchase and loyalty cannot be analysed.
 - One year of data means seasonality is suggestive, not proven. There is no cost or margin data, so revenue is analysed, not profit.
+
+
+# Credit Card Fraud Detection (Task 3)
+
+Exploratory analysis and data preparation for detecting fraudulent credit card transactions. The data is **extremely imbalanced** (fraud is only about 0.17% of transactions), so the project focuses on understanding that imbalance, why plain accuracy is a misleading metric, and how to prepare the data for a fair model.
+
+> **Status:** work in progress. Exploration, the train/test split and SMOTE resampling are done. Model training and evaluation are the next step (see [Next steps](#next-steps)).
+
+
+
+The dataset itself is not included because of its size. See [Dataset](#dataset) below.
+
+## Tech stack
+
+Python 3 · pandas · matplotlib · seaborn · scikit-learn · imbalanced-learn · Jupyter Notebook
+
+## Dataset
+
+`creditcard.csv`: **284,807 transactions × 31 columns**, with no missing values.
+
+| Column | Description |
+|---|---|
+| `Time` | Seconds elapsed since the first transaction in the dataset |
+| `V1` – `V28` | Anonymised numerical features (the output of a PCA transformation) |
+| `Amount` | Transaction amount |
+| `Class` | Target: `0` = legitimate, `1` = fraud |
+
+This appears to be the widely used **Credit Card Fraud Detection** dataset on Kaggle (ULB Machine Learning Group, `mlg-ulb/creditcardfraud`). Download `creditcard.csv` from there and place it next to the notebook.
+
+## What the notebook does
+
+1. **Load and inspect** the data: shape, columns, dtypes and null check (all 31 columns complete, 30 float and 1 integer).
+2. **Measure the class imbalance:**
+
+   | | Count |
+   |---|---|
+   | Total transactions | 284,807 |
+   | Fraud transactions | 492 |
+   | Fraud percentage | **0.173%** |
+
+3. **Fraud vs. non-fraud amounts:** box plot of `Amount` by `Class`.
+4. **Time-of-day analysis:** creates an `Hour` feature from `Time` and plots legitimate vs. fraud transactions by hour.
+5. **Why accuracy is misleading:** a model that predicts "not fraud" for everything would score about 99.8% accuracy while catching **zero** fraud. The notebook therefore uses **Precision, Recall, F1-score, the confusion matrix and ROC-AUC**, with **Recall** as the key metric (it measures how many real frauds are caught).
+6. **Stratified train/test split** (80/20, `random_state=42`), which keeps the fraud ratio the same in both sets:
+
+   | | Legitimate | Fraud |
+   |---|---|---|
+   | Training set | 227,451 | 394 |
+   | Test set | 56,864 | 98 |
+
+7. **SMOTE oversampling on the training data only**, which balances the training set to 227,451 legitimate and 227,451 fraud samples. The test set is left untouched so that evaluation reflects real-world, imbalanced data.
+
+## How to run
+
+```bash
+pip install pandas matplotlib seaborn scikit-learn imbalanced-learn jupyter
+jupyter notebook Creditcard.ipynb
+```
+
+Before running, update the data path in the loading cell to where `creditcard.csv` is on your machine, for example:
+
+```python
+card = pd.read_csv("creditcard.csv")
+```
+
+## Notes
+
+- **`Hour` is relative, not clock time.** `Time` counts seconds from the first transaction, so `Hour` shows position within each 24-hour cycle of the data, not the true time of day.
+- **Resample only the training data.** Applying SMOTE before the split would leak synthetic copies of test information into training and inflate results. The notebook correctly resamples after splitting.
+
